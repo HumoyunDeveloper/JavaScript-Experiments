@@ -1,0 +1,74 @@
+*, *::after, *::before {
+    box-sizing: border-box;
+}
+
+#scene {
+    width: 100%;
+    height: 102%;
+    background-color: #011;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+html, body {
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+}
+
+#planets {
+    display: flex;
+    width: 30%;
+    height: 100%;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    color: #cdd;
+    z-index: 2;
+    flex-direction: column;
+    gap: 10px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+#planets div {
+    border-radius: 8px;
+    padding: .5em;
+    position: relative;
+    cursor: pointer;
+    transition: .5s cubic-bezier(0.6, -0.28, 0.735, 0.045);
+    overflow: hidden;
+    font-weight: bold;
+    height: 40px;
+    background-color: rgba(30, 100, 100, 0.2);
+}
+
+#planets div::before {
+    content: "";
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    height: 2px;
+    width: 100%;
+    box-shadow: 0px 3px 10px 17px #133;
+}
+
+#planets div::after {
+    content: "";
+    position: absolute;
+    width: 0%;
+    height: 2px;
+    background-color: #144;
+    bottom: 0;
+    left: 0;
+    transition: .8s cubic-bezier(0.6, -0.28, 0.735, 0.045);
+}
+
+#planets div:hover::after {
+    width: 100%;
+}
+
+#planets div:hover {
+    height: 63px;
+}
