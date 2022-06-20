@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Battery Life Indicator</title>
+        <style type="text/css">
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            html,
+            body {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                width: 100%;
+            }
+
+            .button {
+                outline: none;
+                border: none;
+                font-family: Verdana, Geneva, Tahoma, sans-serif;
+                font-weight: bold;
+                text-transform: capitalize;
+                box-shadow: 3px 3px 3px 3px rgba(0, 120, 120, 0.2);
+                background-color: #144;
+                font-size: 17px;
+                color: #eff;
+                width: 210px;
+                height: 45px;
+                border-radius: 8px;
+                transition: 0.2s all;
+            }
+
+            .button:hover {
+                box-shadow: none;
+            }
+
+            p {
+                padding: .2em;
+                color: #144;
+                font-family: monospace;
+                border-radius: 5px;
+                margin-bottom: 10px;
+                user-select: all;
+            }
+        </style>
+    </head>
+    <body>
+        
+        <p>navigator.vibrate(_number_)</p>
+        <button id="vibrate_btn" class="button">Vibrate device</button>
+
+        <script type="text/javascript">
+            let vbtn = document.getElementById("vibrate_btn");
+
+            vbtn.addEventListener("click", function () {
+                // easy peasy :)
+                navigator.vibrate(10);
+            });
+        </script>
+    </body>
+</html>

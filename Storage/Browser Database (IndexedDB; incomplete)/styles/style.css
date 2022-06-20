@@ -1,0 +1,32 @@
+*,
+*::after,
+*::before {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    background-color: #122;
+    color: #eff;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    padding: .5em;
+}
+
+table {
+    margin-top: 15px;
+    width: 400px;
+    border: 1px solid #188;
+    border-radius: 5px;
+    border-collapse: collapse;
+}
+
+table th {
+    padding: .3em .5em;
+    text-align: left;
+}
+
+table tr td {
+    padding: .3em .5em;
+}

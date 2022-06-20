@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Clipboard Read/Write</title>
+        <style>
+            .data {
+                padding: 0.4em;
+                border: 1px solid #d9d9d9;
+                display: inline-block;
+            }
+
+            input,
+            button {
+                padding: 0.5em;
+                margin-right: 0.5em;
+                outline: none;
+                margin-top: 0.5em;
+            }
+
+            .block {
+                margin-top: 0.5em;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="data">
+            Please, accept the permission to see the text in your clipboard
+        </div>
+        <div class="block">
+            <input
+                id="clipboard"
+                type="text"
+                placeholder="Type here..."
+            /><button id="write">write</button>
+        </div>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                let data = document.getElementsByClassName("data")[0],
+                    clipboard = document.getElementById("clipboard"),
+                    btn = document.getElementById("write");
+
+                adjust();
+
+                btn.onclick = function () {
+                    navigator.clipboard
+                        .writeText(clipboard.value)
+                        .then(_ => alert("Copied!"))
+                        .catch(_ => alert(_));
+                    adjust();
+                };
+
+                function adjust() {
+                    navigator.clipboard
+                        .readText()
+                        .then(
+                            _ =>
+                                (data.innerText = _.length == 0 ? "[Empty]" : _)
+                        )
+                        .catch(_ => alert(_));
+                }
+            });
+        </script>
+    </body>
+</html>

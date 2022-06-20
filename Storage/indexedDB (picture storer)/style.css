@@ -1,0 +1,25 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    padding-top: 10px;
+    flex-direction: column;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+    color: #155;
+}
+
+img {
+    width: 50%;
+    display: block;
+    margin: auto;
+    margin: 10px auto;
+    border-radius: 8px;
+}
