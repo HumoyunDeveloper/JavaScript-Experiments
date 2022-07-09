@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapping Numbers</title>
+    <style>
+        *,
+        *::after,
+        *::before {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            background-color: #122;
+        }
+
+        .title {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #aee;
+            font-weight: bolder;
+            font-size: xx-large;
+            letter-spacing: 1.5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="title">Hello World</div>
+
+    <script>
+        const scale = (_value, _inMin, _inMax, _outMin, _outMax) => {
+            return (_value - _inMin) * (_outMax - _outMin) / (_inMax - _inMin) + _outMin;
+        }
+
+        function adjust(_e) {
+            const bg = scale(_e.clientX, 0, innerWidth, 70, 100);
+            document.body.style.background = `rgba(20, ${bg}, ${bg}, 1)`;
+        }
+
+        window.addEventListener("mousemove", adjust);
+    </script>
+</body>
+
+</html>

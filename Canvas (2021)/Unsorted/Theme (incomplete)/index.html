@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>SPACE SONG</title>
+    <style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        h1 {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-family: 'Courier New', Courier, monospace;
+            color: #bbb;
+            text-align: center;
+            cursor: default;
+            width: 350px;
+            font-size: 30px;
+            z-index: 2;
+        }
+
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+    </style>
+</head>
+
+<h1></h1>
+
+<body style="
+        position: fixed;
+        left: 0px;
+        right: 0px;
+        top: 0px;
+        bottom: 0px;
+        overflow: hidden;
+        margin: 0;
+        padding: 0;
+    ">
+    <canvas id="canvas" style="
+    width: 100%; 
+    height: 100%; 
+    padding: 0; 
+    margin: 0">Sorry, you need to update your browser to see the animation...</canvas>
+
+    <script src="./typed.js"></script>
+    <script type="module">
+        // code is messed up :)
+
+        "user strict";
+        import Button from "./Button.js";
+
+        const mouse = {
+            x: undefined,
+            y: undefined,
+            active: false,
+            started: false,
+        };
+
+        let clicked = false,
+            h1 = document.getElementsByTagName("h1")[0];
+
+        const canvas = document.getElementById("canvas");
+        const c = canvas.getContext("2d"),
+            { width, height } = c;
+
+        let w, h;
+
+        const setCanvasExtents = () => {
+            w = document.body.clientWidth;
+            h = document.body.clientHeight;
+            canvas.width = w;
+            canvas.height = h;
+        };
+
+        setCanvasExtents();
+
+        window.onresize = () => {
+            setCanvasExtents();
+        };
+
+        const makeStars = count => {
+            const out = [];
+            for (let i = 0; i < count; i++) {
+                const s = {
+                    x: Math.random() * 1600 - 800,
+                    y: Math.random() * 900 - 450,
+                    z: Math.random() * 1000,
+                };
+                out.push(s);
+            }
+            return out;
+        };
+
+        let stars = makeStars(10000);
+
+        const clear = () => {
+            c.fillStyle = "rgba(0, 0, 0, 0.2)";
+            c.fillRect(0, 0, canvas.width, canvas.height);
+        };
+
+        const putPixel = (x, y, brightness) => {
+            const intensity = brightness * 255;
+            const rgb =
+                "rgb(" + intensity + "," + intensity + "," + intensity + ")";
+            c.fillStyle = rgb;
+            c.fillRect(x, y, 1, 1);
+        };
+
+        const moveStars = distance => {
+            const count = stars.length;
+            for (var i = 0; i < count; i++) {
+                const s = stars[i];
+                s.z -= distance;
+                while (s.z <= 1) {
+                    s.z += 1000;
+                }
+            }
+        };
+
+        let drawText = function (_text) {
+            c.fillStyle = "white";
+            c.font = "39px monospace";
+
+            c.fillText(_text, canvas.width * 0.5 - c.measureText(_text).width * 0.5, canvas.height * 0.3);
+        }
+
+        const startBtn = new Button({
+            x: canvas.width * 0.5,
+            y: canvas.height * 0.3,
+            text: "START",
+            backgroundColor: "white",
+            color: "black",
+            fontSize: 16,
+            fontFamily: "monospace",
+            canvas,
+            ctx: c,
+            width: 200
+        });
+
+        startBtn.init();
+
+        const abtBtn = new Button({
+            x: canvas.width * 0.5,
+            y: canvas.height * 0.3,
+            text: "ABOUT",
+            backgroundColor: "white",
+            color: "black",
+            fontSize: 16,
+            fontFamily: "monospace",
+            canvas,
+            ctx: c,
+            width: 200
+        });
+
+        abtBtn.init();
+        startBtn.setPos(canvas.width * 0.5 - startBtn.dim.width * 0.5, canvas.height * 0.42 - startBtn.dim.height * 0.6);
+        abtBtn.setPos(canvas.width * 0.5 - abtBtn.dim.width * 0.5, canvas.height * 0.52 - abtBtn.dim.height * 0.7);
+
+        const updateBtns = function () {
+            startBtn.place();
+            abtBtn.place();
+        }
+
+        let prevTime, show = false;
+        const init = time => {
+            prevTime = time;
+            requestAnimationFrame(tick);
+        };
+
+
+        const img = new Image();
+        img.src = "./imgs/spaceship.png";
+        function Img(_d) {
+            this.x = 0;
+            this.y = 0;
+            this.color = "#177";
+            this.w = this.h = _d;
+            this.colliding = false;
+
+            this.draw = function () {
+                c.drawImage(img, this.x, this.y, this.w, this.h);
+            };
+
+            this.update = function () {
+                this.draw();
+
+                if (mouse.y < canvas.height * 0.7) mouse.y = canvas.height * 0.7;
+
+                if (this.x + this.w * 0.5 != mouse.x)
+                    this.x -= (this.x + this.w * 0.5 - mouse.x || 0) / 30;
+
+                if (this.y != mouse.y && !(mouse.y < canvas.height * 0.7))
+                    this.y -= (this.y - mouse.y || 0) / 30;
+
+            }
+        }
+
+        const ig = new Img(50);
+        ig.w = 241 / 2;
+        ig.h = 127 / 2;
+        ig.x = canvas.width * 0.5 - ig.w * 0.5;
+        ig.y = canvas.height + 100;
+
+
+        startBtn.onClick(function () {
+            startBtn.place = function () { };
+            abtBtn.place = function () { };
+            drawText = function () { };
+
+            setTimeout(function () {
+                const typed = new Typed("h1", {
+                    strings: ["Welcome^200.^200.^200.", "You like 2D games?^1000", "I'm sure, you do^100 :)", "But, this is not a game.", "This is just lyrics.", "I hope you like it ;)", ""],
+                    typeSpeed: 100,
+                    backSpeed: 50,
+                    onComplete() {
+
+                        setTimeout(function () {
+                            const typed2 = new Typed("h1", {
+                                strings: ["Btw, this is smth that you can play around if you're bored", "Okay, I play the music.", "Get ready", " 3", " 2", " 1"],
+                                typeSpeed: 100,
+                                backSpeed: 50,
+                            });
+                            clicked = true;
+                            show = true;
+
+                            console.log("lol");
+                        }, 1000);
+                    }
+                });
+            }, 2000);
+
+
+        });
+
+        const border1 = new Image();
+        border1.src = "./imgs/border.png";
+
+        const tick = time => {
+            let elapsed = time - prevTime;
+            prevTime = time;
+
+            drawText("SPACE SONG");
+
+            c.drawImage(border1, -canvas.width * 0.1, -canvas.height * 0.13, canvas.width * 1.2, canvas.height * 1.3);
+
+
+            moveStars(elapsed * 0.1);
+
+            clear();
+
+            const cx = w / 2;
+            const cy = h / 2;
+
+            const count = stars.length;
+            for (var i = 0; i < count; i++) {
+                const star = stars[i];
+
+                const x = cx + star.x / (star.z * 0.001);
+                const y = cy + star.y / (star.z * 0.001);
+
+                if (x < 0 || x >= w || y < 0 || y >= h) {
+                    continue;
+                }
+
+                const d = star.z / 1000.0;
+                const b = 1 - d * d;
+
+                putPixel(x, y, b);
+            }
+
+            updateBtns();
+
+            if (clicked) ig.update();
+
+            requestAnimationFrame(tick);
+        };
+
+        requestAnimationFrame(init);
+
+        canvas.onmousedown = function (_e) {
+            mouse.active = true;
+            mouse.x = _e.clientX - canvas.getBoundingClientRect().left;
+            mouse.y = _e.clientY - canvas.getBoundingClientRect().top;
+        };
+
+        canvas.ontouchstart = function (_e) {
+            mouse.active = true;
+            mouse.x =
+                _e.touches[0].clientX - canvas.getBoundingClientRect().left;
+            mouse.y =
+                _e.touches[0].clientY - canvas.getBoundingClientRect().top;
+        };
+
+        canvas.onmousemove = function (_e) {
+            mouse.x = _e.clientX - canvas.getBoundingClientRect().left;
+            mouse.y = _e.clientY - canvas.getBoundingClientRect().top;
+        };
+
+        canvas.ontouchmove = function (_e) {
+            mouse.x =
+                _e.touches[0].clientX -
+                canvas.getBoundingClientRect().left;
+            mouse.y =
+                _e.touches[0].clientY -
+                canvas.getBoundingClientRect().top;
+        };
+
+        canvas.ontouchend = function () {
+            mouse.active = false;
+        };
+
+        canvas.onmouseup = function () {
+            mouse.active = false;
+        };
+
+        canvas.oncontextmenu = _e => _e.preventDefault();
+    </script>
+</body>
