@@ -3,13 +3,9 @@ export default class Canvas2D {
         width = 200,
         height = 250,
         parent = document.body,
-        resetFrame = false
+        resetFrame = false,
     }) {
-        window.requestAnimationFrame =
-            window.requestAnimationFrame ||
-            window.oRequestAnimationFrame ||
-            window.mozRequestAnimationFrame ||
-            window.webkitRequestAnimationFrame;
+
 
         this.Keyboard = {
             active: false,
@@ -60,43 +56,47 @@ export default class Canvas2D {
         this.resetFrame = resetFrame;
         this.setSize(width || true, height);
 
+        var _this;
+
         this.Mouse = {
             active: false,
-            x: undefined,
-            y: undefined,
+            x: 0,
+            y: 0,
             event(_e) {
                 switch (_e.type) {
                     case "touchstart":
-                        this.x = _e.touches[0].clientX;
-                        this.y = _e.touches[0].clientY;
+                        _this.x = _e.touches[0].clientX;
+                        _this.y = _e.touches[0].clientY;
 
-                        this.active = true;
+                        _this.active = true;
                         break;
                     case "touchmove":
-                        this.x = _e.touches[0].clientX;
-                        this.y = _e.touches[0].clientY;
+                        _this.x = _e.touches[0].clientX;
+                        _this.y = _e.touches[0].clientY;
                         break;
                     case "touchend":
-                        this.active = false;
+                        _this.active = false;
                         break;
                     case "mousedown":
-                        this.x = _e.clientX;
-                        this.y = _e.clientY;
+                        _this.x = _e.clientX;
+                        _this.y = _e.clientY;
 
-                        this.active = true;
+                        _this.active = true;
                         break;
                     case "mousemove":
-                        this.x = _e.clientX;
-                        this.y = _e.clientY;
+                        _this.x = _e.clientX;
+                        _this.y = _e.clientY;
                         break;
                     case "mouseup":
-                        this.active = false;
+                        _this.active = false;
                         break;
                 }
-                this.x -= canvas.getBoundingClientRect().left;
-                this.y -= canvas.getBoundingClientRect().top;
+                _this.x -= canvas.getBoundingClientRect().left;
+                _this.y -= canvas.getBoundingClientRect().top;
             },
         };
+
+        _this = this.Mouse;
 
         parent.appendChild(this.canvas);
 
@@ -111,17 +111,19 @@ export default class Canvas2D {
     }
 
     setSize(_w, _h) {
-        if (!_w === true) {
+        if (_w === true) {
             this.centerX = (this.width = this.canvas.width = innerWidth) * 0.5;
-            this.centerY = (this.height = this.canvas.height = innerHeight) * 0.5;
+            this.centerY =
+                (this.height = this.canvas.height = innerHeight) * 0.5;
             return;
         }
-        this.centerX =
-            (this.width = this.canvas.width = _w) * 0.5;
-        this.centerY =
-            (this.height = this.canvas.height = _h) * 0.5;
+        this.centerX = (this.width = this.canvas.width = _w) * 0.5;
+        this.centerY = (this.height = this.canvas.height = _h) * 0.5;
     }
 
+    /**
+     * Animation Loop 
+     */
     animate(_) {
         const loop = () => {
             this.resetFrame
