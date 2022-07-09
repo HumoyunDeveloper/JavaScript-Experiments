@@ -1,0 +1,17 @@
+{
+    "name" : "Example",
+    "short_name" : "Example",
+    "description" : "Shunchaki test uchun",
+    "start_url" : ".",
+    "display" : "standalone",
+    "icons" : [
+        {
+            "sizes" : "144x144",
+            "type" : "image/png",
+            "src" : "./res/icon.png"
+        }
+    ],
+    "background_color" : "#099",
+    "theme_color" : "#088",
+    "orientation" : "portrait"
+}

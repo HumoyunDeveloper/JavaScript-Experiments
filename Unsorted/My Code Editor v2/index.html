@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="./styles/style.css" />
+        <link rel="stylesheet" href="./languages/languages.css" />
+        <link rel="stylesheet" href="./libs/duDialog.css" />
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+            integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+        />
+        <title>My Code Editor</title>
+        <meta name="theme-color" content="#144" />
+        <meta name="title" content="My Code Editor" />
+        <meta
+            name="description"
+            content="Welcome to my simple code editor, here you can code HTML5, CSS3, JavaScript and JSON languages. Web-site has lots of features such as Syntax Highlighting, Search and Replace, Auto-Complete Characters and more!
+No library and framework is used for this website, pure JavaScript!
+These days, I'm working on improving and making it much more complex, contact us at humoyundeveloper@gmail.com. "
+        />
+        <link
+            rel="apple-touch-icon"
+            sizes="180x180"
+            href="/apple-touch-icon.png"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/favicon-32x32.png"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/favicon-16x16.png"
+        />
+        <link rel="manifest" href="/site.webmanifest" />
+        <meta name="msapplication-TileColor" content="#da532c" />
+        <meta name="theme-color" content="#ffffff" />
+        <meta property="og:type" content="website" />
+        <meta
+            property="og:url"
+            content="http://my-code-editor-simple.netlify.app/"
+        />
+        <meta property="og:title" content="My Code Editor" />
+        <meta
+            property="og:description"
+            content="Welcome to my simple code editor, here you can code HTML5, CSS3, JavaScript and JSON languages. Web-site has lots of features such as Syntax Highlighting, Search and Replace, Auto-Complete Characters and more!
+No library and framework is used for this website, pure JavaScript!
+These days, I'm working on improving and making it much more complex, contact us at humoyundeveloper@gmail.com. "
+        />
+        <meta
+            property="og:image"
+            content="https://metatags.io/assets/meta-tags-16a33a6a8531e519cc0936fbba0ad904e52d35f34a46c97a2c9f6f7dd7d336f2.png"
+        />
+
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta
+            property="twitter:url"
+            content="http://my-code-editor-simple.netlify.app/"
+        />
+        <meta property="twitter:title" content="My Code Editor" />
+        <meta
+            property="twitter:description"
+            content="Welcome to my simple code editor, here you can code HTML5, CSS3, JavaScript and JSON languages. Web-site has lots of features such as Syntax Highlighting, Search and Replace, Auto-Complete Characters and more!
+No library and framework is used for this website, pure JavaScript!
+These days, I'm working on improving and making it much more complex, contact us at humoyundeveloper@gmail.com. "
+        />
+        <meta
+            property="twitter:image"
+            content="https://metatags.io/assets/meta-tags-16a33a6a8531e519cc0936fbba0ad904e52d35f34a46c97a2c9f6f7dd7d336f2.png"
+        />
+    </head>
+    <body>
+        <div class="menu">
+            <div class="file">
+                <input
+                    type="text"
+                    placeholder="File name"
+                    id="filename"
+                    style="display: none"
+                /><button
+                    class="download-button"
+                    id="button"
+                    style="color: white; font-size: 18px"
+                >
+                    <i class="fa fa-download"></i>
+                </button>
+            </div>
+
+            <div class="opts">
+                <a
+                    href="./settings.html"
+                    target="_self"
+                    style="
+                        font-family: monospace;
+                        color: #fff;
+                        font-size: 18px;
+                        margin-right: 8px;
+                        text-decoration: none;
+                    "
+                    ><i class="fa fa-gear"></i
+                ></a>
+                <select title="Set the font size" id="font-size">
+                    <option value="17px" selected>17px</option>
+                    <option value="18px">18px</option>
+                    <option value="19px">19px</option>
+                    <option value="20px">20px</option>
+                    <option value="21px">21px</option>
+                    <option value="22px">22px</option>
+                    <option value="23px">23px</option>
+                </select>
+
+                <select
+                    style="margin-right: 10px"
+                    title="Choose a language"
+                    name="language"
+                    id="language"
+                >
+                    <option value="html" disabled>HTML (not available)</option>
+                    <option value="css">CSS</option>
+                    <option value="js">JavaScript</option>
+                    <option value="json" selected>JSON</option>
+                </select>
+            </div>
+        </div>
+        <div class="editor">
+            <div class="line-number-indicator">
+                <div class="line">1</div>
+            </div>
+            <textarea
+                id="textarea"
+                cols="30"
+                rows="10"
+                placeholder="Write some JSON code here..."
+                spellcheck="false"
+            ></textarea>
+            <pre class="error-container"></pre>
+        </div>
+        <button id="copy" class="fw">Copy to Clipboard</button>
+
+        <label
+            title="'Log' allows you to copy the exact code with styling into your browser console."
+            style="visibility: hidden"
+        >
+            <b>log</b>
+            <input type="checkbox" name="log" id="log" />
+        </label>
+
+        <script src="./libs/duDialog.js"></script>
+        <script src="./scripts/_localStorageSupport.js"></script>
+        <script src="./scripts/_tools.js"></script>
+        <script src="./libs/console.js"></script>
+        <script src="./libs/Design.js"></script>
+        <script src="./libs/mod.min.js"></script>
+        <script src="./scripts/script.js"></script>
+    </body>
+</html>

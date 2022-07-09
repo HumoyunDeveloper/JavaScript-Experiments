@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XMLHTTPRequest</title>
+    <style type="text/css">
+        *,
+        *::after,
+        *::before {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #133;
+            color: white;
+            font-family: monospace;
+        }
+
+        .container {
+            width: 300px;
+            height: auto;
+            background-color: #fefefe;
+            box-shadow: 1px 2px 3px 4px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            color: #133;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 18px;
+            padding: .5em .7em;
+            display: flex;
+            flex-direction: column;
+            gap: 0px;
+        }
+
+        .user {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            height: 35px;
+        }
+
+        .user .age {
+            width: 15%;
+            text-align: center;
+            border-left: 1px solid #d9d9d9;
+            font-weight: bold;
+            color: #155;
+        }
+
+        h3 {
+            color: #155;
+            margin-bottom: 4px;
+        }
+
+        .skeleton {
+            background-color: #d9d9d9;
+            position: relative;
+            overflow: hidden;
+            margin: .1em 0;
+        }
+
+        .skeleton .name {
+            animation: toright 2s cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite;
+            width: 30px;
+            background-color: #eee;
+            height: 100%;
+            position: absolute;
+        }
+
+        @keyframes toright {
+            from {
+                left: -10%;
+            }
+
+            to {
+                left: 150%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="user skeleton">
+            <div class="name"></div>
+            <div class="age"></div>
+        </div>
+        <div class="user skeleton">
+            <div class="name"></div>
+            <div class="age"></div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        const xhr = new XMLHttpRequest(),
+            containerEl = document.getElementsByClassName("container")[0];
+
+        setTimeout(() => {
+            xhr.open("GET", "./users.json");
+            xhr.send(null);
+
+            xhr.addEventListener("readystatechange", _ => {
+                if (_.target.readyState === 4 && _.target.status === 200) {
+                    manipulate(_.target.response);
+                }
+            });
+
+            xhr.addEventListener("error", _ => console.log(_));
+
+            function manipulate(_jsonText) {
+                const converted = JSON.parse(_jsonText);
+                containerEl.innerHTML = "";
+
+                converted.users.forEach(_ => {
+                    containerEl.innerHTML += `
+                            <div class="user">
+                                <div class="name">${_.name}</div>
+                                <div class="age">${_.age}</div>
+                            </div>
+                        `;
+                });
+            }
+        }, 5000);
+    </script>
+</body>
+
+</html>

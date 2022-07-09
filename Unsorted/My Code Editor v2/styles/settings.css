@@ -1,0 +1,85 @@
+*, *::after, *::before {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    background-color: #133;
+    color: white;
+    font-family: monospace;
+    display: flex;
+    height: 100vh;
+    justify-content: space-evenly;
+    flex-direction: column;
+    align-items: center;
+}
+
+.container {
+    width: 70%;
+    padding: .2em 1.2em;
+}
+
+.title {
+    position: relative;
+    padding-bottom: .3em;
+}
+
+.title::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 50px;
+    height: 3px;
+    background-color: #166;
+}
+
+.options {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    margin-top: .3em;
+}
+
+.option {
+    padding-left: .5em;
+    width: 100%;
+    min-height: 40px;
+    max-height: 180px;
+    background-color: #144;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 15px;
+    font-size: 17px;
+    font-family: monospace;
+    position: relative;
+    user-select: none;
+    cursor: pointer;
+}
+
+.option .text-content {
+    padding: .5em .5em .5em 0;
+    width: 100%;
+}
+
+.option .checkbox {
+    width: 50px;
+    height: 100%;
+    border: 1px solid #177;
+    background-color: #177;
+}
+
+.italic {
+    font-style: italic;
+}
+
+select {
+    background-color: #177;
+    border: none;
+    color: white;
+    width: 60px;
+}

@@ -1,0 +1,61 @@
+.json_chars {
+    font-weight: bold;
+    color: brown;
+}
+
+.json_string {
+    color: cyan;
+}
+
+.json_numbers {
+    color: gold;
+}
+
+.json_property {
+    font-style: italic;
+}
+
+.js_keywords {
+    color: #f70;
+}
+.js_chars {
+    color: cyan;
+}
+.js_excepts {
+    color: #f70;
+}
+.js_numbs {
+    color: gold;
+}
+.js_funcs {
+    font-style: italic;
+    color: cyan;
+}
+.js_string {
+    color: #0f9;
+}
+.js_comment {
+    font-style: italic;
+    color: #666;
+}
+
+.js_property {
+    font-style: italic;
+}
+
+.css_selector {
+    color: cyan;
+    font-style: italic;
+}
+
+.css_property {
+    color: rgb(74, 240, 88);
+}
+
+.css_value {
+    color: gold;
+}
+
+.css_string {
+    color: #0f9;
+}

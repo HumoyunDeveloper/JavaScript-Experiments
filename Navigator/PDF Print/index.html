@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Print Page as PDF</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="content">
+            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Magnam adipisci, repellendus ad quasi beatae illum
+            iure nemo. Doloribus optio est nisi sint aperiam eaque, dignissimos animi hic. Dicta voluptate maiores
+            suscipit eligendi, unde exercitationem labore quod omnis inventore odit. Error?
+        </div>
+        <button id="button">Click to save</button>
+    </div>
+
+    <script>
+        document.getElementById("button").onclick = () => {
+            window.print();
+        };
+    </script>
+</body>
+
+</html>

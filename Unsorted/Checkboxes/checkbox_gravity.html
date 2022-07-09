@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        *::after, *::before, * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            height: 100vh;
+            width: 100%;
+            overflow: hidden;
+            background-color: #fefefe;
+        }
+
+        input[type=checkbox] {
+            position: absolute;
+        }
+    </style>
+    <title>Checkbox Collision</title>
+</head>
+<body>
+    
+    <div id="checkbox-container">
+        
+    </div>
+
+    <script type="text/javascript">
+        var checkboxContainer = document.querySelector("#checkbox-container");
+        const randomNumber = _num => Math.floor(Math.random() * _num);
+        const checks = generateCheckboxes(300); 
+
+        init();
+        function init() {
+
+            checks.forEach(el => {
+                checkboxContainer.appendChild(el);
+            });
+
+            animate(checks);
+        }
+
+        function generateCheckboxes(_num = 0) {
+            const array = [];
+            for(var d = 0; d < _num; d++) {
+                var element = document.createElement("input");
+                element.setAttribute("type", "checkbox");
+                element.style.left = randomNumber(window.innerWidth) + "px";
+                element.style.top = randomNumber(320) + "px";
+                element.dataset.vy = randomNumber(15);
+                array.push(element); 
+            }
+            return array;
+        }
+
+        
+        function animate() {
+            checks.forEach(el => {
+                el.dataset.vy = (+el.dataset.vy + 1);
+                el.style.top = (+el.style.top.toString().replace("px", "") + +el.dataset.vy) + "px";
+                if((+el.style.top.toString().replace("px", "") >= window.innerHeight)) {
+                    el.dataset.vy = -el.dataset.vy * 0.95;
+                }
+            });
+            window.requestAnimationFrame(animate);
+        }
+
+
+
+    </script>
+</body>
+</html>
