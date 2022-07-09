@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Rectangle +Mouse</title>
+        <style type="text/css">
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+                user-select: none;
+                -webkit-user-select: none;
+            }
+
+            html,
+            body {
+                overscroll-behavior: contain;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+            }
+
+            canvas {
+                overflow: hidden;
+                background-color: #177;
+                margin-top: 10px;
+                border-radius: 5px;
+            }
+
+            p {
+                margin-top: 8px;
+            }
+        </style>
+    </head>
+    <body>
+
+        <p>Click, hold and drag as much height and width as you want.</p>
+        <canvas width="300" height="300" id="canvas">No Canvas Support</canvas>
+
+        <script type="text/javascript">
+            let canvas = document.getElementById("canvas"),
+                ctx = canvas.getContext("2d"),
+                mouse = {
+                    fx: undefined,
+                    fy: undefined,
+                    x: undefined,
+                    y: undefined,
+                    active: false,
+                    reset() {
+                        this.fx = undefined;
+                        this.y = undefined;
+                        this.x = undefined;
+                        this.fy = undefined;
+                    },
+                },
+                rects = [],
+                rect;
+
+            const FillText = function (_text = "No text", _x = 15, _y = 20) {
+                this.x = _x;
+                this.y = _y;
+                this.text = _text;
+                this.font = "16px bold monospace";
+                this.color = "#fefefe";
+                this.draw = function () {
+                    ctx.font = this.font;
+                    ctx.fillStyle = this.color;
+                    ctx.fillText(this.text, this.x, this.y);
+                };
+            };
+
+            const Rect = function (_x = 10, _y = 10) {
+                this.x = _x;
+                this.y = _y;
+                this.width = 100;
+                this.height = 150;
+                this.color = "#155";
+                this.movingDown = false;
+                this.movingLeft = false;
+                this.movingUp = false;
+                this.movingRight = false;
+                this.initialVX = 1;
+                this.initialVY = 3;
+                this.vx = 1;
+                this.ground = 0;
+                this.vy = 0;
+                this.frictionX = 0.2;
+                this.gravity = 0.2;
+                this.maxJumpHeight = canvas.height / 3;
+                this.identical = false;
+                this.done = false;
+
+                this.draw = function () {
+                    ctx.fillStyle = this.color;
+                    ctx.fillRect(this.x, this.y, this.width, this.height);
+                };
+
+                this.update = function () {
+                    this.draw();
+
+                    if (this.y <= this.ground) {
+                        this.y += this.vy;
+                        this.vy += this.gravity;
+                    }
+
+                    if (this.y >= this.ground) this.y = this.ground;
+                };
+
+                this.collide = function (_) {
+                    return !(
+                        this.x + this.width <= _.x ||
+                        this.x >= _.x + _.width ||
+                        this.y + this.height <= _.y ||
+                        this.y >= _.y + _.height
+                    );
+                };
+
+                this.logic = function () {};
+            };
+
+            let ground = new Rect(0, canvas.height - 40),
+                text = new FillText("Rectangle Count: 0");
+
+            ground.color = "#144";
+            ground.width = canvas.width;
+            ground.height = 40;
+
+            animate();
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                text.draw();
+                text.text = "Rectangle count: " + rects.length;
+
+                rects.forEach(_rect => {
+                    _rect.done ? _rect.update() : _rect.draw();
+                });
+
+                ground.draw();
+                requestAnimationFrame(animate);
+            }
+
+            canvas.onmousedown = function (_e) {
+                mouse.active = true;
+                mouse.fx = _e.clientX - canvas.getBoundingClientRect().left;
+                mouse.fy = _e.clientY - canvas.getBoundingClientRect().top;
+                rect = new Rect(mouse.fx, mouse.fy);
+                rect.ground = ground.y - rect.height;
+                rect.color = getRandomColor();
+                rect.x = mouse.fx;
+                rect.y = mouse.fy;
+                rect.width = 0;
+                rect.height = 0;
+                rects.push(rect);
+            };
+
+            canvas.ontouchstart = function (_e) {
+                mouse.active = true;
+                mouse.fx =
+                    _e.touches[0].clientX - canvas.getBoundingClientRect().left;
+                mouse.fy =
+                    _e.touches[0].clientY - canvas.getBoundingClientRect().top;
+                rect = new Rect(mouse.fx, mouse.fy);
+                rect.color = getRandomColor();
+                rect.x = mouse.fx;
+                rect.y = mouse.fy;
+                rect.width = 0;
+                rect.height = 0;
+                rects.push(rect);
+            };
+
+            canvas.onmousemove = function (_e) {
+                if (mouse.active) {
+                    mouse.x = _e.clientX - canvas.getBoundingClientRect().left;
+                    mouse.y = _e.clientY - canvas.getBoundingClientRect().top;
+                    editObj();
+                }
+            };
+
+            canvas.ontouchmove = function (_e) {
+                if (mouse.active) {
+                    editObj();
+                    mouse.x =
+                        _e.touches[0].clientX -
+                        canvas.getBoundingClientRect().left;
+                    mouse.y =
+                        _e.touches[0].clientY -
+                        canvas.getBoundingClientRect().top;
+                }
+            };
+
+            canvas.ontouchend = function () {
+                mouse.active = false;
+                mouse.reset();
+                rect.done = true;
+            };
+
+            canvas.onmouseup = function () {
+                mouse.active = false;
+                mouse.reset();
+                rect.done = true;
+                if (rect.height < 0) {
+                    rect.width = Math.abs(rect.width);
+                    rect.height = Math.abs(rect.height);
+                    rect.x = rect.x - rect.width;
+                    rect.y = rect.y - rect.height;
+                }
+            };
+
+            function getRandomColor() {
+                let colors = ["#133", "#144", "#155", "#166"];
+                return colors[Math.floor(Math.random() * colors.length)];
+            }
+
+            function editObj() {
+                rect.width = mouse.x - mouse.fx;
+                rect.height = mouse.y - mouse.fy;
+                rect.ground = ground.y - Math.abs(rect.height);
+            }
+        </script>
+    </body>
+</html>

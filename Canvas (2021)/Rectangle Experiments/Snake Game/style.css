@@ -1,0 +1,33 @@
+*,
+*::after,
+*::before {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    overflow: hidden;
+    width: 100%;
+    color: #155;
+    height: 100vh;
+    display: flex;
+    user-select: none;
+    -webkit-user-select: none;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+canvas {
+    background-color: #133;
+    border-radius: 8px;
+}
+
+.title {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}

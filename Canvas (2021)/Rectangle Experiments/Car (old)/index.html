@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Game</title>
+        <style type="text/css">
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            html,
+            body {
+                width: 100%;
+                height: 100vh;
+                overflow: hidden;
+                font-family: "Franklin Gothic Medium", "Arial Narrow", Arial,
+                    sans-serif;
+            }
+
+            .buttons {
+                position: absolute;
+                left: 0;
+                bottom: 20px;
+                width: 100%;
+                height: auto;
+                display: flex;
+                flex-direction: row;
+                justify-content: space-around;
+                align-items: center;
+            }
+
+            .button {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-around;
+                align-items: center;
+                width: 100px;
+                height: 50px;
+                user-select: none;
+                border-radius: 10px;
+                color: whitesmoke;
+                background-color: #144;
+            }
+
+            #container {
+                width: 100%;
+                height: 100vh;
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+            }
+
+            canvas {
+                border-radius: 20px;
+                box-shadow: 2px 3px 4px rgba(0, 0, 0, 0.2);
+            }
+        </style>
+    </head>
+    <body>
+        <div id="container"></div>
+
+        <div class="buttons">
+            <div class="button left">Chap</div>
+            <div class="button right">O'ng</div>
+        </div>
+
+        <script type="text/javascript">
+            let container = document.querySelector("#container");
+            // Canvas...
+            const setupCanvas = () => {
+                let canvas = document.createElement("canvas");
+                return { canvas, ctx: canvas.getContext("2d") };
+            };
+
+            let game = setupCanvas();
+            container.appendChild(game.canvas);
+            game.canvas.style.background = "#87CCEB";
+            game.canvas.width = innerWidth / 1.3;
+            game.canvas.height = innerHeight / 2;
+
+            // destruction...
+            const { width, height } = game.canvas;
+
+            // Ball obyecti...
+            function Ball(_opts = {}) {
+                (this.x = _opts.x),
+                    (this.y = _opts.y),
+                    (this.r = _opts.r),
+                    (this.c = _opts.c);
+                this.vx = 0;
+                this.draw = () => {
+                    game.ctx.fillStyle = this.c;
+                    game.ctx.beginPath();
+                    game.ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2, false);
+                    game.ctx.closePath();
+                    game.ctx.fill();
+                };
+                this.jump = function () {
+                    this.y += 2;
+                };
+            }
+
+            // Rect obyecti...
+            function Rect(_opts = {}) {
+                (this.x = _opts.x),
+                    (this.y = _opts.y),
+                    (this.w = _opts.w),
+                    (this.h = _opts.h),
+                    (this.c = _opts.c);
+                this.draw = () => {
+                    game.ctx.fillStyle = this.c;
+                    game.ctx.fillRect(
+                        this.x,
+                        this.y,
+                        this.w,
+                        this.h,
+                        Math.PI * 2,
+                        false
+                    );
+                };
+            }
+
+            function Player(x, y, w, h, c = "gray") {
+                (this.x = x),
+                    (this.y = y),
+                    (this.w = w),
+                    (this.h = h),
+                    (this.vx = 0);
+
+                this.leftBalloon = new Ball({
+                    x: this.x,
+                    y: this.y,
+                    r: 25,
+                    c: "#144",
+                });
+
+                this.rightBalloon = new Ball({
+                    x: this.w,
+                    y: this.y,
+                    r: 25,
+                    c: "#144",
+                });
+
+                this.draw = function () {
+                    this.leftBalloon.x = this.x + 30;
+                    this.leftBalloon.y = this.y + 54;
+                    this.rightBalloon.x = this.x + 170;
+                    this.rightBalloon.y = this.y + 54;
+
+                    game.ctx.fillStyle = c;
+                    game.ctx.strokeStyle = c;
+                    game.ctx.beginPath();
+                    game.ctx.moveTo(this.x, this.y + 10);
+                    game.ctx.lineTo(this.x, this.y + this.h);
+                    game.ctx.lineTo(this.x + this.w, this.y + h);
+                    game.ctx.lineTo(this.x + this.w, this.y + 10);
+                    game.ctx.lineTo(this.x + this.w - 40, this.y + 10);
+                    game.ctx.lineTo(this.x + this.w - 40, this.y - 20);
+                    game.ctx.lineTo(this.x + this.w - 160, this.y - 20);
+                    game.ctx.lineTo(this.x + this.w - 160, this.y + 10);
+                    game.ctx.closePath();
+                    game.ctx.stroke();
+                    game.ctx.fill();
+
+                    if (player.vx == 4) {
+                        game.ctx.strokeStyle = "white";
+                        game.ctx.beginPath();
+                        game.ctx.moveTo(this.x + 10, this.y + 10);
+                        game.ctx.lineTo(this.x - 70, this.y + 10);
+                        game.ctx.closePath();
+                        game.ctx.stroke();
+
+                        game.ctx.beginPath();
+                        game.ctx.moveTo(this.x + 40, this.y - 20);
+                        game.ctx.lineTo(this.x - 30, this.y - 20);
+                        game.ctx.closePath();
+                        game.ctx.stroke();
+                    }
+
+                    if (player.vx == -4) {
+                        game.ctx.strokeStyle = "white";
+                        game.ctx.beginPath();
+                        game.ctx.moveTo(this.x + this.w, this.y + 10);
+                        game.ctx.lineTo(this.x + this.w + 50, this.y + 10);
+                        game.ctx.closePath();
+                        game.ctx.stroke();
+
+                        game.ctx.beginPath();
+                        game.ctx.moveTo(this.x + this.w, this.y - 20);
+                        game.ctx.lineTo(this.x + this.w - 40, this.y - 20);
+                        game.ctx.closePath();
+                        game.ctx.stroke();
+                    }
+
+                    this.leftBalloon.draw();
+                    this.rightBalloon.draw();
+                };
+            }
+
+            let ball = new Ball({
+                x: 0,
+                y: height - 75,
+                r: 25,
+                c: "#144",
+            });
+
+            let sun = new Ball({
+                x: width,
+                y: 0,
+                r: 100,
+                c: "yellow",
+            });
+
+            let ground = new Rect({
+                x: 0,
+                y: height - 50,
+                w: width,
+                h: 50,
+                c: "#444",
+            });
+
+            let whiteLine = new Rect({
+                x: 20,
+                y: height - 45,
+                w: 80,
+                h: 15,
+                c: "whitesmoke",
+            });
+
+            let whiteLine2 = new Rect({
+                x: 160,
+                y: height - 45,
+                w: 80,
+                h: 15,
+                c: "whitesmoke",
+            });
+
+            let whiteLine3 = new Rect({
+                x: 310,
+                y: height - 45,
+                w: 80,
+                h: 15,
+                c: "whitesmoke",
+            });
+
+            let whiteLine4 = new Rect({
+                x: 470,
+                y: height - 45,
+                w: 80,
+                h: 15,
+                c: "whitesmoke",
+            });
+
+            const player = new Player(200, 200, 200, 50);
+
+            animate();
+            function animate() {
+                game.ctx.clearRect(0, 0, width, height);
+                player.draw();
+                ground.draw();
+                game.ctx.shadowColor = "yellow";
+                game.ctx.shadowBlur = "1px";
+                game.ctx.shadowOffsetX = 10;
+                sun.draw();
+                whiteLine.draw();
+                whiteLine2.draw();
+                whiteLine3.draw();
+                whiteLine4.draw();
+
+                player.x += player.vx;
+                if (player.x - (player.w - 120) >= width) {
+                    player.x = -player.w + 2;
+                }
+                if (player.x + player.w <= 0) {
+                    player.x = width + player.w;
+                }
+
+                requestAnimationFrame(animate); // 60fps...
+            }
+
+            window.onkeydown = function (_e) {
+                switch (_e.key) {
+                    case "ArrowRight":
+                        player.vx = 4;
+                        break;
+                    case "ArrowLeft":
+                        player.vx = -4;
+                        break;
+                }
+            };
+
+            window.onkeyup = function () {
+                player.vx = 0;
+            };
+
+            let left = document.querySelector(".left");
+            let right = document.querySelector(".right");
+            
+            left.addEventListener("mousedown", function() {
+                player.vx = -4;
+            });
+
+            left.addEventListener("mouseup", function() {
+                player.vx = 0;
+            })
+
+            right.addEventListener("mousedown", function() {
+                player.vx = 4;
+            });
+
+            right.addEventListener("mouseup", function() {
+                player.vx = 0;
+            })
+            
+        </script>
+    </body>
+</html>
+
+<!-- hooh :) -->
