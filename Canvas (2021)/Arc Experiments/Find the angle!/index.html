@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find the angle!</title>
+    <style>
+        *,
+        *::after,
+        *::before {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            background-color: #133;
+            color: #eff;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: end;
+            align-items: flex-start;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 1em;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>000D</h1>
+
+    <script>
+        let h1 = document.querySelector("h1"),
+            degree = 0,
+            mouse = { x: undefined, y: undefined },
+            x, y;
+
+        const format = _ => {
+            return _ <= 99 ? _ <= 9 ? "00" + _ : "0" + _ : _;
+        };
+
+        const convertToDegrees = (_x, _y) => {
+            return Math.atan2(_x, _y) * 180 / Math.PI;
+        };
+
+        const event = _e => {
+            if (_e.type === "touchmove") {
+                mouse.x = _e.touches[0].clientX;
+                mouse.y = _e.touches[0].clientY;
+            } else {
+                mouse.x = _e.clientX;
+                mouse.y = _e.clientY;
+            }
+            h1.innerText = format(
+                Math.abs(convertToDegrees(mouse.x, mouse.y - innerHeight).toFixed(0) - 180)
+            ) + "D";
+        };
+
+        window.addEventListener("mousemove", event);
+        window.addEventListener("touchmove", event);
+    </script>
+</body>
+
+</html>
