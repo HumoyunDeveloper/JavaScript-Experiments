@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spiral</title>
+    <style>
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        #scene {
+            width: 100%;
+            height: 100vh;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: #122;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="scene">No Canvas Support</canvas>
+    <script type="text/javascript">
+
+        let cn = document.querySelector("#scene"),
+            ctx = cn.getContext("2d"), width, height,
+            centerX, centerY, x, y, angle_radian,
+            radius = 150, lineWidth = 20, wave, _inc = 1;
+
+        const resize = () => {
+            width = cn.width = innerWidth;
+            height = cn.height = innerHeight;
+            centerX = width * 0.5;
+            centerY = height * 0.5;
+            radius = width * 0.5;
+        };
+
+        const clearCanvas = () => {
+            ctx.clearRect(0, 0, width, height);
+        };
+
+        const init = () => {
+            resize();
+            loop();
+        }
+
+        const drawSpiral = () => {
+            ctx.lineCap = "round";
+            ctx.lineJoin = "round";
+            ctx.strokeStyle = "#188";
+            ctx.lineWidth = 4;
+            ctx.beginPath();
+            ctx.shadowBlur = 15;
+            ctx.shadowColor = "rgba(10, 250, 250, 0.7)";
+
+            for (let i = 0; i < _inc; i++) {
+                radius < 10 ? radius : radius -= 0.08;
+
+                angle_radian = (i * Math.PI * 2) / 360;
+
+                x = centerX + Math.cos(angle_radian) * radius;
+                y = centerY + Math.sin(angle_radian) * radius;
+
+                i > 0 ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
+            }
+            ctx.stroke();
+        };
+
+        const loop = () => {
+            clearCanvas();
+
+            radius = width * 0.26;
+            _inc > 360 * 10 ? _inc : _inc += 1;
+
+            drawSpiral();
+
+            requestAnimationFrame(loop);
+        };
+
+        document.addEventListener("DOMContentLoaded", init);
+        window.addEventListener("resize", resize);
+        window.oncontextmenu = _ => _.preventDefault();
+    </script>
+</body>
+
+</html>
