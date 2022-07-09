@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Erase Image</title>
+        <link rel="stylesheet" href="./CSS/style.css" />
+        <style>*{user-select: none;}</style>
+    </head>
+    <body>
+        <p>Double click on the screen to capture a photo. <input type="range" min="10" max="30" step="1"> <span id="val"></span></p>
+        <video autoplay id="cam" style="position: absolute; left: -100%"></video>
+        <p style="font-size: 5px;">This sucks!</p>
+        <script defer type="module" src="./script.js"></script>
+    </body>
+</html>

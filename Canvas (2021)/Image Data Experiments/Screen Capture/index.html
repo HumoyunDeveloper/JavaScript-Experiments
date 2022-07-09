@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Screen Capture</title>
+    <style>
+        video {
+            border: 2px solid #d9d9d9;
+            width: 50%;
+            height: 50%;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+    </style>
+</head>
+
+<body>
+    <video id="video" autoplay></video>
+    <script>
+        let video = document.getElementById("video"), e, e2;
+
+        navigator.mediaDevices.getDisplayMedia({ video: { width: window.innerWidth / 2, height: window.innerHeight / 2 } }).then(_e => {
+            e = _e;
+            video.srcObject = _e;
+        }).catch(_ => document.write("Error: " + _));
+
+        navigator.mediaDevices.getUserMedia({ video: true }).then(_e => {
+            e2 = _e;
+        }).catch(_ => document.write("Error: " + _));
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Image Data</title>
+    <style type="text/css">
+        canvas {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <canvas id="canvas">
+        No canvas support please update your broser...
+    </canvas>
+
+    <script type="text/javascript">
+        let canvas = document.getElementById("canvas"),
+            ctx = canvas.getContext("2d"), index;
+
+        canvas.style.border = "1px solid #d99";
+        canvas.width = Math.floor(innerWidth / 2);
+        canvas.height = Math.floor(innerHeight / 2);
+
+        const imageData = ctx.createImageData(canvas.width, canvas.height);
+
+        for (let i = 0; i < imageData.height; i++) {
+            for (let j = 0; j < imageData.width; j++) {
+                index = (i * imageData.width + j) * 4;
+                imageData.data[index] = getRandom();
+                imageData.data[index + 1] = getRandom();
+                imageData.data[index + 2] = getRandom();
+                imageData.data[index + 3] = "255";
+            }
+        }
+
+        ctx.putImageData(imageData, 0, 0);
+
+        function getRandom() {
+            return Math.floor(Math.random() * 255);
+        }
+    </script>
+</body>
+
+</html>
